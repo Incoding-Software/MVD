@@ -1,0 +1,115 @@
+﻿@using Incoding.MvcContrib
+@using MVD.Domain
+<!DOCTYPE html>
+<html lang="ru-Ru">
+    <head>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.8.3.min.js")"> </script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/underscore.min.js")"> </script>                
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.form.js")"> </script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.history.js")"> </script>        
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.min.js")"> </script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"> </script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/handlebars.min.js")"> </script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/incoding.framework.js")"> </script>        
+    </head>
+    
+    <body>        
+        @{
+            string containerId = Guid.NewGuid().ToString();
+        }
+        <div>
+            <label>Push single command</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher().Push(new AddUserCommand
+                                                      {
+                                                              Id = "59140B31-8BB2-49BA-AE52-368680D5418A",
+                                                              Name = "Vlad"
+                                                      }))
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>
+        <div>
+            <label>Push single generic command</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher().Push(new AddEntityCommand<KeyValueVm>()))
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>
+        <div>
+            <label>Push composite command</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher()
+                               .Push(new AddUserCommand { Id = "1", Name = "Name" })
+                               .Push(new ApproveUserCommand { UserId = "2" }))
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>   
+        
+        <div>
+            <label>Query as Json</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher()
+                               .Query(new GetCurrentDtQuery())
+                               .AsJson())
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>
+
+        <div>
+            <label>Query generic as Json</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher()
+                               .Query(new GetTypeNameQuery<GetCurrentDtQuery>())
+                               .AsJson())
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>
+        
+        <div>
+            <label>Query as view</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher()
+                               .Query(new GetUserQuery())
+                               .AsView("~/Views/Home/User.cshtml"))
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>  
+        <div>
+            <label>Query as file</label>
+            <a href="@Url.Dispatcher().Query(new GetFileQuery()).AsFile(incFileDownloadName: "framework")">Download</a>
+        </div>        
+        <div>
+            <label>Model as View</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher()
+                               .Model(new GetUserQuery.Response
+                                          {
+                                                  Id = "2",
+                                                  Name = "Incoding Framework"
+                                          })
+                               .AsView("~/Views/Home/User.cshtml"))
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>
+        
+
+
+        
+        <div id="@containerId">            
+        </div>
+    </body>
+</html>
