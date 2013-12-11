@@ -1,13 +1,15 @@
 ﻿namespace MVD.UI.Controllers
 {
+    #region << Using >>
+
     using System.Web.Mvc;
-    using Incoding.CQRS;
     using Incoding.MvcContrib;
 
-    public class HomeController:IncControllerBase
+    #endregion
+
+    public class HomeController : IncControllerBase
     {
-        public HomeController(IDispatcher dispatcher)
-                : base(dispatcher) { }
+        #region Http action
 
         [HttpGet]
         public ActionResult Index()
@@ -15,5 +17,6 @@
             return View();
         }
 
+        #endregion
     }
 }

@@ -9,12 +9,11 @@
     #endregion
 
     public class DispatcherController : DispatcherControllerBase
-    {
-        #region Constructors
-
+    {        
         public DispatcherController()
-                : base(new[] { Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Bin", "MVD.Domain.dll") }) { }
-
-        #endregion
+                : base(new[] { Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Bin", "MVD.Domain.dll") })
+        {
+            
+        }    
     }
 }

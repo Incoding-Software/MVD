@@ -105,10 +105,16 @@
                   .AsHtmlAttributes()
                   .ToButton("Run"))
         </div>
-        
-
-
-        
+        <div>
+            <label>View</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher().AsView("~/Views/Home/Template.cshtml"))
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>
+                
         <div id="@containerId">            
         </div>
     </body>
