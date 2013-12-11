@@ -8,6 +8,7 @@ using System.Web.Routing;
 
 namespace MVD.UI
 {
+    using FluentValidation.Mvc;
     using Incoding.Block.IoC;
     using Incoding.MvcContrib;
     using MVD.Domain;
@@ -24,7 +25,8 @@ namespace MVD.UI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            Bootstrapper.Start();            
+            Bootstrapper.Start();
+            ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new IncValidatorFactory()));            
         }
     }
 }

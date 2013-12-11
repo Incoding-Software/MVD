@@ -72,6 +72,7 @@
     <Compile Include="Operations\Query\GetFileQuery.cs" />
     <Compile Include="Operations\Query\GetTypeNameQuery.cs" />
     <Compile Include="Operations\Query\GetUserQuery.cs" />
+    <Compile Include="Operations\Query\GetUserWithValidationQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

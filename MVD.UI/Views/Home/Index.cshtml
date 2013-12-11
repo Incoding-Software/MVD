@@ -62,7 +62,6 @@
                   .AsHtmlAttributes()
                   .ToButton("Run"))
         </div>
-
         <div>
             <label>Query generic as Json</label>
             @(Html.When(JqueryBind.Click)
@@ -89,7 +88,41 @@
         <div>
             <label>Query as file</label>
             <a href="@Url.Dispatcher().Query(new GetFileQuery()).AsFile(incFileDownloadName: "framework")">Download</a>
-        </div>        
+        </div>    
+        <div>
+            <label>Query with validation</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher()
+                               .Query(new GetUserWithValidationQuery
+                                          {
+                                                  LessThanOrEqual5 = 6
+                                          })
+                               .EnableValidate()
+                               .AsJson())
+                  .Where<IncodingResult.JsonModelStateData>(data => data.isValid == false)
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .OnError(dsl => dsl.With(r => r.Id(containerId)).Core()
+                                     .Insert
+                                     .For<IncodingResult.JsonModelStateData>(r => r.errorMessage)
+                                     .Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>    
+        <div>
+            <label>Query without validation</label>
+            @(Html.When(JqueryBind.Click)
+                  .Do()
+                  .AjaxPost(Url.Dispatcher()
+                               .Query(new GetUserWithValidationQuery
+                                          {
+                                                  LessThanOrEqual5 = 6
+                                          })
+                               .AsJson())
+                  .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+                  .AsHtmlAttributes()
+                  .ToButton("Run"))
+        </div>    
         <div>
             <label>Model as View</label>
             @(Html.When(JqueryBind.Click)
