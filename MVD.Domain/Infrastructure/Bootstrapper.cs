@@ -1,5 +1,6 @@
 namespace MVD.Domain
 {
+    #region << Using >>
 
     using System.Configuration;
     using System.Linq;
@@ -10,9 +11,11 @@ namespace MVD.Domain
     using Incoding.CQRS;
     using Incoding.Data;
     using Incoding.EventBroker;
+    using Incoding.Extensions;
     using Incoding.MvcContrib;
     using NHibernate.Context;
 
+    #endregion
 
     public static class Bootstrapper
     {
@@ -22,30 +25,29 @@ namespace MVD.Domain
         {
             IoCFactory.Instance.Initialize(init => init.WithProvider(new StructureMapIoCProvider(registry =>
                                                                                                      {
-                                                                                                         registry.For<IDispatcher>().Use<DefaultDispatcher>();
-                                                                                                         registry.For<IEventBroker>().Use<DefaultEventBroker>();
-                                                                                                         registry.For<ITemplateFactory>().Use<TemplateHandlebarsFactory>();
+                                                                                                         registry.For<IDispatcher>().Singleton().Use<DefaultDispatcher>();
+                                                                                                         registry.For<IEventBroker>().Singleton().Use<DefaultEventBroker>();
+                                                                                                         registry.For<ITemplateFactory>().Singleton().Use<TemplateHandlebarsFactory>();
 
                                                                                                          var configure = Fluently
                                                                                                                  .Configure()
                                                                                                                  .Database(MsSqlConfiguration.MsSql2008.ConnectionString(ConfigurationManager.ConnectionStrings["Main"].ConnectionString))
                                                                                                                  .Mappings(configuration => configuration.FluentMappings.AddFromAssembly(typeof(Bootstrapper).Assembly))
                                                                                                                  .CurrentSessionContext<ThreadStaticSessionContext>();
-
-                                                                                                         registry.For<IManagerDataBase>().Use(new NhibernateManagerDataBase(configure));
+                                                                                                         registry.For<IManagerDataBase>().Singleton().Use(() => new NhibernateManagerDataBase(configure));
                                                                                                          registry.For<INhibernateSessionFactory>().Singleton().Use(() => new NhibernateSessionFactory(configure));
-
-                                                                                                         registry.For<IUnitOfWorkFactory>().Use<NhibernateUnitOfWorkFactory>();
-                                                                                                         registry.For<IUnitOfWork>().Use<NhibernateUnitOfWork>();
+                                                                                                         registry.For<IUnitOfWorkFactory>().Singleton().Use<NhibernateUnitOfWorkFactory>();
                                                                                                          registry.For<IRepository>().Use<NhibernateRepository>();
 
                                                                                                          registry.Scan(r =>
                                                                                                                            {
+                                                                                                                               r.AssembliesFromApplicationBaseDirectory(p => p.GetType().IsImplement(typeof(AbstractValidator<>)) ||
+                                                                                                                                                                             p.GetType().IsImplement<ISetUp>() ||
+                                                                                                                                                                             p.GetType().IsImplement(typeof(IEventSubscriber<>)));
                                                                                                                                r.WithDefaultConventions();
-                                                                                                                               r.TheCallingAssembly();
-                                                                                                                               
+
                                                                                                                                r.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>));
-                                                                                                                               r.ConnectImplementationsToTypesClosing(typeof(IEventSubscriber<>));                                                                                                                               
+                                                                                                                               r.ConnectImplementationsToTypesClosing(typeof(IEventSubscriber<>));
                                                                                                                                r.AddAllTypesOf<ISetUp>();
                                                                                                                            });
                                                                                                      })));
@@ -56,6 +58,4 @@ namespace MVD.Domain
 
         #endregion
     }
-
-
 }

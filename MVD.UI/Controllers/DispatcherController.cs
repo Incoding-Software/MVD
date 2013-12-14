@@ -2,18 +2,18 @@
 {
     #region << Using >>
 
-    using System;
-    using System.IO;
     using Incoding.MvcContrib.MVD;
+    using MVD.Domain;
 
     #endregion
 
     public class DispatcherController : DispatcherControllerBase
-    {        
+    {
+        #region Constructors
+
         public DispatcherController()
-                : base(new[] { Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Bin", "MVD.Domain.dll") })
-        {
-            
-        }    
+                : base(typeof(Bootstrapper).Assembly) { }
+
+        #endregion
     }
 }

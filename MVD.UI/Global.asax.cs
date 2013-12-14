@@ -28,5 +28,13 @@ namespace MVD.UI
             Bootstrapper.Start();
             ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new IncValidatorFactory()));            
         }
+
+       protected void Application_Error()
+       {
+           var er = Server.GetLastError();
+           Server.ClearError();
+
+       }
+
     }
 }
