@@ -169,6 +169,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\User.cshtml" />
     <Content Include="Views\Home\Template.cshtml" />
+    <Content Include="Views\Home\No_Ajax.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

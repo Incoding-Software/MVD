@@ -23,7 +23,7 @@
                   .Do()
                   .AjaxPost(Url.Dispatcher().Push(new AddUserCommand
                                                       {
-                                                              Id = "59140B31-8BB2-49BA-AE52-368680D5418A",
+                                                              Id = "59140B31-8BB2-49BA-AE52-368680D5418A", 
                                                               Name = "Vlad"
                                                       }))
                   .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
@@ -130,7 +130,7 @@
                   .AjaxPost(Url.Dispatcher()
                                .Model(new GetUserQuery.Response
                                           {
-                                                  Id = "2",
+                                                  Id = "2", 
                                                   Name = "Incoding Framework"
                                           })
                                .AsView("~/Views/Home/User.cshtml"))
@@ -147,7 +147,11 @@
                   .AsHtmlAttributes()
                   .ToButton("Run"))
         </div>
-                
+
+        <div>
+            <label>View without ajax</label>
+            <a href="@Url.Dispatcher().AsView("~/Views/Home/No_Ajax.cshtml")">Go to View</a>        
+        </div>                
         <div id="@containerId">            
         </div>
     </body>

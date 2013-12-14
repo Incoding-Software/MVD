@@ -1,0 +1,19 @@
+﻿@using Incoding.Extensions
+@using Incoding.MvcContrib
+<!DOCTYPE html>
+<html lang="ru-Ru">
+    <head>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.8.3.min.js")"> </script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/underscore.min.js")"> </script>                        
+        <script type="text/javascript" src="@Url.Content("~/Scripts/incoding.framework.js")"> </script>        
+    </head>    
+    <body>
+        <h3>Please wait 2 second and you back to previous page</h3>
+        @(Html.When(JqueryBind.InitIncoding)
+              .Do()
+              .Direct()
+              .OnSuccess(dsl => dsl.Utilities.Document.Back().TimeOut(2.Seconds().TotalMilliseconds))
+              .AsHtmlAttributes()
+              .ToDiv())        
+    </body>
+</html>

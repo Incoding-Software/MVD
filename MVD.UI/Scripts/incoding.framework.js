@@ -232,7 +232,7 @@ function ExecutableHelper() {
             else if (isTypeSelector('queryString')) {
                 res = $.url(window.location.href).param(valueSelector);
             }
-            else if (selector.contains("javascript")) {
+            else if (isTypeSelector('javascript')) {
                 res = eval(valueSelector);
             }
         }
@@ -1084,7 +1084,6 @@ function IncodingMetaElement(element) {
     this.element = element;
     this.runner = tryGetData(element, keyIncodingRunner);
     this.executables = !ExecutableHelper.IsNullOrEmpty(tryGetData(element, 'incoding')) ? $.parseJSON(tryGetData(element, 'incoding')) : '';
-
     this.bind = function(eventName, status) {
 
         var currentElement = this.element;
@@ -1127,7 +1126,6 @@ function IncodingMetaElement(element) {
             return true;
         });
     };
-
     this.invoke = function(e, result) {
         if (!ExecutableHelper.IsNullOrEmpty(this.runner)) {
             this.runner.DoIt(e, result);
@@ -1328,6 +1326,7 @@ function IncodingEngine() {
                 }).length != 0;
 
                 if (hasInitIncoding) {
+                    incodingMetaElement.bind(IncSpecialBinds.InitIncoding, '4');
                     new  IncodingMetaElement(this).invoke(jQuery.Event(IncSpecialBinds.InitIncoding));
                 }
                 $(this).removeAttr('incoding');
