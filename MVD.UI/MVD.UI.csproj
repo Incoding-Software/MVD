@@ -51,8 +51,9 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Incoding">
-      <HintPath>..\packages\Incoding.MetaLanguage.1.0.278.1005\lib\net40\Incoding.dll</HintPath>
+    <Reference Include="Incoding, Version=1.2.15.1058, Culture=neutral, PublicKeyToken=dd0e8930fef8d168, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Incoding.MetaLanguage.1.2.15.1058\lib\net40\Incoding.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations">
       <HintPath>..\packages\JetBrains.Annotations.7.0\lib\net45\JetBrains.Annotations.dll</HintPath>
@@ -143,8 +144,11 @@
     <Content Include="App_Data\Test.mdf" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="Scripts\handlebars-1.1.2.js" />
     <Content Include="Scripts\handlebars.min.js" />
+    <Content Include="Scripts\handlebars.runtime-1.1.2.js" />
     <Content Include="Scripts\incoding.framework.js" />
+    <Content Include="Scripts\incoding.framework.min.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -170,6 +174,7 @@
     <Content Include="Views\Home\User.cshtml" />
     <Content Include="Views\Home\Template.cshtml" />
     <Content Include="Views\Home\No_Ajax.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

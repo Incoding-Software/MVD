@@ -1,12 +1,12 @@
 namespace MVD.Domain
 {
-    #region << Using >>
-
     using System.Configuration;
     using System.Linq;
+    using System.Web.Mvc;
     using FluentNHibernate.Cfg;
     using FluentNHibernate.Cfg.Db;
     using FluentValidation;
+    using FluentValidation.Mvc;
     using Incoding.Block.IoC;
     using Incoding.CQRS;
     using Incoding.Data;
@@ -15,12 +15,8 @@ namespace MVD.Domain
     using Incoding.MvcContrib;
     using NHibernate.Context;
 
-    #endregion
-
     public static class Bootstrapper
     {
-        #region Factory constructors
-
         public static void Start()
         {
             IoCFactory.Instance.Initialize(init => init.WithProvider(new StructureMapIoCProvider(registry =>
@@ -41,9 +37,9 @@ namespace MVD.Domain
 
                                                                                                          registry.Scan(r =>
                                                                                                                            {
-                                                                                                                               r.AssembliesFromApplicationBaseDirectory(p => p.GetType().IsImplement(typeof(AbstractValidator<>)) ||
-                                                                                                                                                                             p.GetType().IsImplement<ISetUp>() ||
-                                                                                                                                                                             p.GetType().IsImplement(typeof(IEventSubscriber<>)));
+                                                                                                                               r.AssembliesFromApplicationBaseDirectory(p => p.GetTypes().Any(type => type.IsImplement(typeof(AbstractValidator<>)) ||
+                                                                                                                                                                                           type.IsImplement<ISetUp>() ||
+                                                                                                                                                                                           type.IsImplement(typeof(IEventSubscriber<>))));
                                                                                                                                r.WithDefaultConventions();
 
                                                                                                                                r.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>));
@@ -52,10 +48,15 @@ namespace MVD.Domain
                                                                                                                            });
                                                                                                      })));
 
+            ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new IncValidatorFactory()));
+            FluentValidationModelValidatorProvider.Configure();
+
             foreach (var setUp in IoCFactory.Instance.ResolveAll<ISetUp>().OrderBy(r => r.GetOrder()))
                 setUp.Execute();
-        }
 
-        #endregion
+			var ajaxDef = JqueryAjaxOptions.Default;
+            ajaxDef.Cache = false; // disabled cache as default
+        }
     }
+
 }
