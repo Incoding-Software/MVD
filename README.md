@@ -9,6 +9,12 @@ MVD
                                     Name = Html.Selector.Name(r=>r.Name),
                                                  })
                                                  
+## Push composite
+
+       
+        Url.Dispatcher().Push(new AddUserCommand { Id = "1", Name = "Name" })
+                        .Push(new ApproveUserCommand { UserId = "2" })
+                                                 
 ## Query as JSON
 
        
