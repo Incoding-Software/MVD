@@ -20,14 +20,11 @@
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            Bootstrapper.Start();
-            new DispatcherController(); // init routes
-
+            
+            
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            
-            ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new IncValidatorFactory()));
+            RouteConfig.RegisterRoutes(RouteTable.Routes);                        
         }
 
         protected void Application_Error()
