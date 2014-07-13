@@ -39,7 +39,17 @@
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>   
-        
+<div>
+    <label>Push composite command ( duplicate command )</label>
+    @(Html.When(JqueryBind.Click)
+          .Do()
+          .AjaxPost(Url.Dispatcher()
+                       .Push(new AddUserCommand { Id = "1", Name = "Name" })
+                       .Push(new AddUserCommand { Id = "2", Name = "Name 2" }))
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .AsHtmlAttributes()
+          .ToButton("Run"))
+</div>         
 <div>
     <label>Query as Json</label>
     @(Html.When(JqueryBind.Click)
