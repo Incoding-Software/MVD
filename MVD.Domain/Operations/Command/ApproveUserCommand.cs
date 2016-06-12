@@ -6,7 +6,7 @@
     {
         public string UserId { get; set; }
 
-        public override void Execute()
+        protected override void Execute()
         {
             Result = UserId;
         }

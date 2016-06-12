@@ -9,29 +9,29 @@
 <div>
     <label>Push single command</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher().Push(new AddUserCommand
                                               {
                                                       Id = "59140B31-8BB2-49BA-AE52-368680D5418A", 
                                                       Name = "Vlad"
                                               }))
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>
 <div>
     <label>Push single generic command</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher().Push(new AddEntityCommand<KeyValueVm>()))
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>
 <div>
     <label>Push composite command</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher()
                        .Push(new AddUserCommand())
                        .Push<AddUserCommand>(new RouteValueDictionary
@@ -39,14 +39,14 @@
                                                          { "[0].Id", 1 }, { "[0].Name", "Name 1" },
                                                          { "[1].Id", 2 }, { "[1].Name", "Name 2" }
                                                  }))
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div> 
 <div>
     <label>Push composite command ( one command )</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher()
                        .Push(new AddUserCommand())
                        .Push<AddUserCommand>(new RouteValueDictionary
@@ -54,29 +54,29 @@
                                                          { "[0].Id", 1 }, { "[0].Name", "Name 1" },
                                                          { "[1].Id", 2 }, { "[1].Name", "Name 2" }
                                                  }))
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>   
 <div>
     <label>Query as Json</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher()
                        .Query(new GetCurrentDtQuery())
                        .AsJson())
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>
 <div>
     <label>Query generic as Json</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher()
                        .Query(new GetTypeNameQuery<GetCurrentDtQuery>())
                        .AsJson())
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>
@@ -84,11 +84,11 @@
 <div>
     <label>Query as view</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher()
                        .Query(new GetUserQuery())
                        .AsView("~/Views/Home/User.cshtml"))
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>  
@@ -99,7 +99,7 @@
 <div>
     <label>Query with validation</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher()
                        .Query(new GetUserWithValidationQuery
                                   {
@@ -108,7 +108,7 @@
                        .EnableValidate()
                        .AsJson())
           .Where<IncodingResult.JsonModelStateData>(data => data.isValid == false)
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .OnError(dsl => dsl.With(r => r.Id(containerId)).Core()
                              .Insert
                              .For<IncodingResult.JsonModelStateData>(r => r.errorMessage)
@@ -119,21 +119,21 @@
 <div>
     <label>Query without validation</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher()
                        .Query(new GetUserWithValidationQuery
                                   {
                                           LessThanOrEqual5 = 6
                                   })
                        .AsJson())
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>    
 <div>
     <label>Model as View</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher()
                        .Model(new GetUserQuery.Response
                                   {
@@ -141,16 +141,16 @@
                                           Name = "Incoding Framework"
                                   })
                        .AsView("~/Views/Home/User.cshtml"))
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>
 <div>
     <label>View</label>
     @(Html.When(JqueryBind.Click)
-          .Do()
+          
           .AjaxPost(Url.Dispatcher().AsView("~/Views/Home/Template.cshtml"))
-          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Core().Insert.Html())
+          .OnSuccess(dsl => dsl.With(r => r.Id(containerId)).Insert.Html())
           .AsHtmlAttributes()
           .ToButton("Run"))
 </div>

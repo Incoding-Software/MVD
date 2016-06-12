@@ -4,7 +4,7 @@
 
     public class AddEntityCommand<TEntity> : CommandBase
     {
-        public override void Execute()
+        protected override void Execute()
         {
             this.Result = typeof(TEntity).Name;
         }

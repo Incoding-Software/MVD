@@ -8,7 +8,7 @@
 
         public string Name { get; set; }
 
-        public override void Execute()
+        protected override void Execute()
         {
             Result = Id + Name;
         }

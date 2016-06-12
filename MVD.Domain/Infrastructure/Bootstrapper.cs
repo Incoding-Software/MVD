@@ -13,10 +13,12 @@ namespace MVD.Domain
     using Incoding.Block.Logging;
     using Incoding.CQRS;
     using Incoding.Data;
-    using Incoding.EventBroker;
+    
     using Incoding.Extensions;
     using Incoding.MvcContrib;
     using NHibernate.Context;
+	using NHibernate.Tool.hbm2ddl;
+	using StructureMap.Graph;
 
     public static class Bootstrapper
     {
@@ -30,18 +32,17 @@ namespace MVD.Domain
 
             IoCFactory.Instance.Initialize(init => init.WithProvider(new StructureMapIoCProvider(registry =>
                                                                                                      {
-                                                                                                         registry.For<IDispatcher>().Singleton().Use<DefaultDispatcher>();
-                                                                                                         registry.For<IEventBroker>().Singleton().Use<DefaultEventBroker>();
+                                                                                                         registry.For<IDispatcher>().Use<DefaultDispatcher>();                                                                                                         
                                                                                                          registry.For<ITemplateFactory>().Singleton().Use<TemplateHandlebarsFactory>();
+																										 registry.For<ITemplateOnServerSide>().Singleton().Use<TemplateHandlebarsOnServerSide>();
 
                                                                                                          var configure = Fluently
                                                                                                                  .Configure()
                                                                                                                  .Database(MsSqlConfiguration.MsSql2008.ConnectionString(ConfigurationManager.ConnectionStrings["Main"].ConnectionString))
                                                                                                                  .Mappings(configuration => configuration.FluentMappings.AddFromAssembly(typeof(Bootstrapper).Assembly))
-                                                                                                                 .CurrentSessionContext<ThreadStaticSessionContext>();
-                                                                                                         registry.For<IManagerDataBase>().Singleton().Use(() => new NhibernateManagerDataBase(configure));
+																												 .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true));                                                                                                                 ;                                                                                                         
                                                                                                          registry.For<INhibernateSessionFactory>().Singleton().Use(() => new NhibernateSessionFactory(configure));
-                                                                                                         registry.For<IUnitOfWorkFactory>().Singleton().Use<NhibernateUnitOfWorkFactory>();
+                                                                                                         registry.For<IUnitOfWorkFactory>().Use<NhibernateUnitOfWorkFactory>();
                                                                                                          registry.For<IRepository>().Use<NhibernateRepository>();
 
                                                                                                          registry.Scan(r =>
@@ -49,18 +50,14 @@ namespace MVD.Domain
                                                                                                                                r.TheCallingAssembly();
                                                                                                                                r.WithDefaultConventions();
 
-                                                                                                                               r.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>));
-                                                                                                                               r.ConnectImplementationsToTypesClosing(typeof(IEventSubscriber<>));
+                                                                                                                               r.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>));                                                                                                                               
                                                                                                                                r.AddAllTypesOf<ISetUp>();
                                                                                                                            });
                                                                                                      })));
 
             ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new IncValidatorFactory()));
             FluentValidationModelValidatorProvider.Configure();
-
-            foreach (var setUp in IoCFactory.Instance.ResolveAll<ISetUp>().OrderBy(r => r.GetOrder()))
-                setUp.Execute();
-
+            
             var ajaxDef = JqueryAjaxOptions.Default;
             ajaxDef.Cache = false; // disabled cache as default
         }
